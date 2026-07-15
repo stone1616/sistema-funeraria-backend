@@ -16,7 +16,7 @@ import lombok.RequiredArgsConstructor;
 @RequiredArgsConstructor
 public class ClienteServiceImpl implements ClienteService {
     private final ClienteRepository clienteRepository;
-    private static final Integer EMPLEADO_ACTUAL = 1;
+    private static final Integer USUARIO_ACTUAL = 1;
     
     @Override
     public List<ListItem> listar() {
@@ -52,7 +52,7 @@ public class ClienteServiceImpl implements ClienteService {
         cliente.setTelefono(request.telefono());
         cliente.setEstado(true);
         cliente.setFechaCreacion(LocalDateTime.now(ZoneId.of("America/Lima")));
-        cliente.setIdEmpleadoCreador(EMPLEADO_ACTUAL);
+        cliente.setIdUsuarioCreacion(USUARIO_ACTUAL);
 
         return toResponse(clienteRepository.save(cliente));
     }
@@ -71,7 +71,7 @@ public class ClienteServiceImpl implements ClienteService {
         cliente.setDni(request.dni());
         cliente.setTelefono(request.telefono());
         cliente.setFechaModificacion(LocalDateTime.now(ZoneId.of("America/Lima")));
-        cliente.setIdEmpleadoModificador(EMPLEADO_ACTUAL);
+        cliente.setIdUsuarioModificacion(USUARIO_ACTUAL);
 
         return toResponse(clienteRepository.save(cliente));
     }
@@ -83,7 +83,7 @@ public class ClienteServiceImpl implements ClienteService {
 
         cliente.setEstado(false);
         cliente.setFechaEliminacion(LocalDateTime.now(ZoneId.of("America/Lima")));
-        cliente.setIdEmpleadoEliminador(EMPLEADO_ACTUAL);
+        cliente.setIdUsuarioEliminacion(USUARIO_ACTUAL);
 
         clienteRepository.save(cliente);
     }
@@ -92,7 +92,7 @@ public class ClienteServiceImpl implements ClienteService {
         return new Response(
                 c.getIdCliente(), c.getNombres(), c.getApellidos(), c.getDni(), c.getTelefono(),
                 c.getFechaCreacion(), c.getFechaModificacion(), c.getFechaEliminacion(), c.getEstado(),
-                c.getIdEmpleadoCreador(), c.getIdEmpleadoModificador(), c.getIdEmpleadoEliminador()
+                c.getIdUsuarioCreacion(), c.getIdUsuarioModificacion(), c.getIdUsuarioEliminacion()
         );
     }
 

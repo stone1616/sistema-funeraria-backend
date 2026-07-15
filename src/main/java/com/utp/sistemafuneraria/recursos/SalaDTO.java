@@ -1,16 +1,25 @@
 package com.utp.sistemafuneraria.recursos;
 
 import java.time.LocalDateTime;
-import java.util.List;
+
+import jakarta.validation.constraints.NotBlank;
+import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Positive;
 
 public interface SalaDTO {
 
     record Request(
+        @NotBlank(message = "El nombre de la sala es obligatorio")
         String nombreSala,
+
+        @NotNull(message = "La capacidad es obligatoria")
+        @Positive(message = "La capacidad debe ser mayor a 0")
         Integer capacidad,
+
         String ubicacion,
-        String estado,
-        String disponibilidad
+
+        @NotBlank(message = "El estado es obligatorio")
+        String estado
     ) {}
 
     record Response(
@@ -19,22 +28,18 @@ public interface SalaDTO {
         Integer capacidad,
         String ubicacion,
         String estado,
-        String disponibilidad,
         LocalDateTime fechaCreacion,
         LocalDateTime fechaModificacion,
         LocalDateTime fechaEliminacion,
-        Integer idEmpleadoCreador,
-        Integer idEmpleadoModificador
+        Integer idUsuarioCreacion,
+        Integer idUsuarioModificacion
     ) {}
 
     record ListItem(
         Integer idSala,
         String nombreSala,
         Integer capacidad,
-        String estado,
-        String disponibilidad
+        String ubicacion,
+        String estado
     ) {}
-
-    record ListResponse(List<ListItem> items) {}
-
 }

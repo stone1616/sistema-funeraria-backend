@@ -1,5 +1,9 @@
 package com.utp.sistemafuneraria.auth.dto;
 
-public class LoginResponse {
-    
-}
+public record LoginResponse(
+    String token,
+    String email,
+    String rol,
+    String nombres,
+    String apellidos
+) {}
