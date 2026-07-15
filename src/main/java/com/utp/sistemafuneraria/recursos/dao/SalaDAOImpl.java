@@ -1,11 +1,11 @@
 package com.utp.sistemafuneraria.recursos.dao;
 
-import java.beans.Statement;
-import java.security.Timestamp;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.sql.Statement;
+import java.sql.Timestamp;
 import java.time.LocalDateTime;
 import java.util.ArrayList;
 import java.util.List;
@@ -13,10 +13,13 @@ import java.util.Optional;
 
 import javax.sql.DataSource;
 
+import org.springframework.stereotype.Repository;
+
 import com.utp.sistemafuneraria.recursos.Sala;
 
+@Repository
 public class SalaDAOImpl implements SalaDAO {
-    
+
     private final DataSource dataSource;
 
     public SalaDAOImpl(DataSource dataSource) {
@@ -45,7 +48,7 @@ public class SalaDAOImpl implements SalaDAO {
 
     @Override
     public Optional<Sala> buscarPorId(Integer id) {
-        
+
         String sql = "SELECT * FROM Sala WHERE idSala = ? AND fechaEliminacion IS NULL";
 
         try (Connection conn = dataSource.getConnection();
@@ -68,9 +71,9 @@ public class SalaDAOImpl implements SalaDAO {
 
     @Override
     public Sala insertar(Sala sala) {
-        
-        String sql = "INSERT INTO Sala (nombreSala, capacidad, ubicacion, estado, disponibilidad, fechaCreacion, idEmpleadoCreador) " +
-                     "VALUES (?, ?, ?, ?, ?, ?, ?)";
+
+        String sql = "INSERT INTO Sala (nombreSala, capacidad, ubicacion, estado, fechaCreacion, idUsuarioCreacion) " +
+                     "VALUES (?, ?, ?, ?, ?, ?)";
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql, Statement.RETURN_GENERATED_KEYS)) {
@@ -79,9 +82,8 @@ public class SalaDAOImpl implements SalaDAO {
             stmt.setInt(2, sala.getCapacidad());
             stmt.setString(3, sala.getUbicacion());
             stmt.setString(4, sala.getEstado());
-            stmt.setString(5, sala.getDisponibilidad());
-            stmt.setTimestamp(6, Timestamp.valueOf(sala.getFechaCreacion()));
-            stmt.setInt(7, sala.getIdEmpleadoCreador());
+            stmt.setTimestamp(5, Timestamp.valueOf(sala.getFechaCreacion()));
+            stmt.setInt(6, sala.getIdUsuarioCreacion());
 
             stmt.executeUpdate();
 
@@ -96,14 +98,13 @@ public class SalaDAOImpl implements SalaDAO {
         }
 
         return sala;
-
     }
 
     @Override
     public Sala actualizar(Sala sala) {
-        
+
         String sql = "UPDATE Sala SET nombreSala = ?, capacidad = ?, ubicacion = ?, estado = ?, " +
-                     "disponibilidad = ?, fechaModificacion = ?, idEmpleadoModificador = ? WHERE idSala = ?";
+                     "fechaModificacion = ?, idUsuarioModificacion = ? WHERE idSala = ?";
 
         try (Connection conn = dataSource.getConnection();
              PreparedStatement stmt = conn.prepareStatement(sql)) {
@@ -112,10 +113,9 @@ public class SalaDAOImpl implements SalaDAO {
             stmt.setInt(2, sala.getCapacidad());
             stmt.setString(3, sala.getUbicacion());
             stmt.setString(4, sala.getEstado());
-            stmt.setString(5, sala.getDisponibilidad());
-            stmt.setTimestamp(6, Timestamp.valueOf(sala.getFechaModificacion()));
-            stmt.setInt(7, sala.getIdEmpleadoModificador());
-            stmt.setInt(8, sala.getIdSala());
+            stmt.setTimestamp(5, Timestamp.valueOf(sala.getFechaModificacion()));
+            stmt.setInt(6, sala.getIdUsuarioModificacion());
+            stmt.setInt(7, sala.getIdSala());
 
             stmt.executeUpdate();
 
@@ -124,12 +124,11 @@ public class SalaDAOImpl implements SalaDAO {
         }
 
         return sala;
-
     }
 
     @Override
     public void eliminar(Integer id) {
-   
+
         String sql = "UPDATE Sala SET fechaEliminacion = ? WHERE idSala = ?";
 
         try (Connection conn = dataSource.getConnection();
@@ -145,7 +144,6 @@ public class SalaDAOImpl implements SalaDAO {
         }
     }
 
-    // Convierte una fila del ResultSet en un objeto Sala
     private Sala mapearFila(ResultSet rs) throws SQLException {
         Sala sala = new Sala();
         sala.setIdSala(rs.getInt("idSala"));
@@ -153,7 +151,6 @@ public class SalaDAOImpl implements SalaDAO {
         sala.setCapacidad(rs.getInt("capacidad"));
         sala.setUbicacion(rs.getString("ubicacion"));
         sala.setEstado(rs.getString("estado"));
-        sala.setDisponibilidad(rs.getString("disponibilidad"));
 
         if (rs.getTimestamp("fechaCreacion") != null)
             sala.setFechaCreacion(rs.getTimestamp("fechaCreacion").toLocalDateTime());
@@ -162,10 +159,11 @@ public class SalaDAOImpl implements SalaDAO {
         if (rs.getTimestamp("fechaEliminacion") != null)
             sala.setFechaEliminacion(rs.getTimestamp("fechaEliminacion").toLocalDateTime());
 
-        sala.setIdEmpleadoCreador(rs.getInt("idEmpleadoCreador"));
+        int creador = rs.getInt("idUsuarioCreacion");
+        if (!rs.wasNull()) sala.setIdUsuarioCreacion(creador);
 
-        int modificador = rs.getInt("idEmpleadoModificador");
-        if (!rs.wasNull()) sala.setIdEmpleadoModificador(modificador);
+        int modificador = rs.getInt("idUsuarioModificacion");
+        if (!rs.wasNull()) sala.setIdUsuarioModificacion(modificador);
 
         return sala;
     }

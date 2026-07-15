@@ -21,7 +21,7 @@ public class Cliente {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     @Column(name = "id_cliente")
     private Integer idCliente;
-    
+
     @Column(name = "nombres")
     private String nombres;
 
@@ -46,12 +46,12 @@ public class Cliente {
     @Column(name = "fechaEliminacion")
     private LocalDateTime fechaEliminacion;
 
-    @Column(name = "idEmpleadoCreador", nullable = false)
-    private Integer idEmpleadoCreador;
+    @Column(name = "idUsuarioCreacion", nullable = false)
+    private Integer idUsuarioCreacion;
 
-    @Column(name = "idEmpleadoModificador")
-    private Integer idEmpleadoModificador;
+    @Column(name = "idUsuarioModificacion")
+    private Integer idUsuarioModificacion;
 
-    @Column(name = "idEmpleadoEliminador")
-    private Integer idEmpleadoEliminador;
+    @Column(name = "idUsuarioEliminacion")
+    private Integer idUsuarioEliminacion;
 }

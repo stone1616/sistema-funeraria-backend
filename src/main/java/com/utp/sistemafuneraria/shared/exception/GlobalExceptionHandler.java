@@ -5,11 +5,13 @@ import java.util.Map;
 import com.utp.sistemafuneraria.shared.response.ApiResponse;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
+import org.springframework.http.converter.HttpMessageNotReadableException;
 import org.springframework.validation.FieldError;
 import org.springframework.web.bind.MethodArgumentNotValidException;
 import org.springframework.web.bind.annotation.ExceptionHandler;
+import org.springframework.web.bind.annotation.RestControllerAdvice;
 
-
+@RestControllerAdvice
 public class GlobalExceptionHandler {
     
  // 400 - Errores de validación de Bean Validation (@NotBlank, @Pattern, @Size, etc.)
@@ -38,6 +40,14 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .status(HttpStatus.CONFLICT)
                 .body(ApiResponse.error(ex.getMessage()));
+    }
+
+    // 400 - Cuerpo de la petición mal formado (ej. fecha con formato incorrecto)
+    @ExceptionHandler(HttpMessageNotReadableException.class)
+    public ResponseEntity<ApiResponse<Void>> handleNotReadable(HttpMessageNotReadableException ex) {
+        return ResponseEntity
+                .status(HttpStatus.BAD_REQUEST)
+                .body(ApiResponse.error("La petición contiene datos con un formato inválido. Verifica los campos e intenta nuevamente."));
     }
 
     // 400 - Errores de negocio genéricos

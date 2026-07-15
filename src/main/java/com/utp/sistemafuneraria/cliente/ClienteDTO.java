@@ -33,9 +33,9 @@ public class ClienteDTO {
         LocalDateTime fechaModificacion,
         LocalDateTime fechaEliminacion,
         Boolean estado,
-        Integer idEmpleadoCreador,
-        Integer idEmpleadoModificador,
-        Integer idEmpleadoEliminador
+        Integer idUsuarioCreacion,
+        Integer idUsuarioModificacion,
+        Integer idUsuarioEliminacion
     ) {}
 
     record ListItem(

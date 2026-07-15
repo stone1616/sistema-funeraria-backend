@@ -6,17 +6,16 @@ import lombok.Data;
 @Data
 public class Sala {
 
-    private int idSala;
+    private Integer idSala;
     private String nombreSala;
     private Integer capacidad;
     private String ubicacion;
     private String estado;
-    private String disponibilidad;
     private LocalDateTime fechaCreacion;
     private LocalDateTime fechaModificacion;
     private LocalDateTime fechaEliminacion;
-    private Integer idEmpleadoCreador;
-    private Integer idEmpleadoModificador;
-    private Integer idEmpleadoEliminador;
-    
+    private Integer idUsuarioCreacion;
+    private Integer idUsuarioModificacion;
+    private Integer idUsuarioEliminacion;
+
 }
