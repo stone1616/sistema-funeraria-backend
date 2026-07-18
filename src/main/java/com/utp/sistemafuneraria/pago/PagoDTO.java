@@ -5,6 +5,7 @@ import java.time.LocalDateTime;
 
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
+import jakarta.validation.constraints.Pattern;
 import jakarta.validation.constraints.Positive;
 
 public class PagoDTO {
@@ -20,8 +21,10 @@ public class PagoDTO {
         BigDecimal monto,
 
         @NotBlank(message = "El método de pago es obligatorio")
+        @Pattern(regexp = "^(EFECTIVO|TARJETA|TRANSFERENCIA|YAPE|PLIN)$", message = "Método de pago inválido")
         String metodoPago,
 
+        @Pattern(regexp = "^(PENDIENTE|CONFIRMADO|ANULADO)$", message = "Estado de pago inválido")
         String estadoPago,
         String numeroRecibo
     ) {}
@@ -47,6 +50,7 @@ public class PagoDTO {
         Integer idComprobante,
         LocalDateTime fechaPago,
         BigDecimal monto,
-        String metodoPago
+        String metodoPago,
+        String numeroRecibo
     ) {}
 }

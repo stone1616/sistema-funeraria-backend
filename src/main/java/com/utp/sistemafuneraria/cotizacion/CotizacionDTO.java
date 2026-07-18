@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
 
 public class CotizacionDTO {
 
@@ -14,6 +15,7 @@ public class CotizacionDTO {
         Integer idServicio,
 
         @NotNull(message = "El monto estimado es obligatorio")
+        @Positive(message = "El monto estimado debe ser mayor a 0")
         BigDecimal montoEstimado,
 
         LocalDateTime fechaCotizacion,

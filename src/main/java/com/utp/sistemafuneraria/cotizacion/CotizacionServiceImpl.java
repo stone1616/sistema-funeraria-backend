@@ -44,7 +44,8 @@ public class CotizacionServiceImpl implements CotizacionService {
         Cotizacion cotizacion = new Cotizacion();
         cotizacion.setIdServicio(request.idServicio());
         cotizacion.setMontoEstimado(request.montoEstimado());
-        cotizacion.setFechaCotizacion(request.fechaCotizacion());
+        cotizacion.setFechaCotizacion(
+                request.fechaCotizacion() != null ? request.fechaCotizacion() : LocalDateTime.now(ZoneId.of("America/Lima")));
         cotizacion.setEstado(request.estado());
         cotizacion.setFechaCreacion(LocalDateTime.now(ZoneId.of("America/Lima")));
         cotizacion.setIdUsuarioCreacion(USUARIO_ACTUAL);
