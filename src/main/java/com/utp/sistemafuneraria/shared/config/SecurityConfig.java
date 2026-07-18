@@ -2,6 +2,7 @@ package com.utp.sistemafuneraria.shared.config;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
+import org.springframework.http.HttpMethod;
 import org.springframework.security.authentication.AuthenticationManager;
 import org.springframework.security.config.annotation.authentication.configuration.AuthenticationConfiguration;
 import org.springframework.security.config.annotation.web.builders.HttpSecurity;
@@ -36,6 +37,40 @@ public class SecurityConfig {
             .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
             .authorizeHttpRequests(auth -> auth
                 .requestMatchers("/api/auth/**").permitAll()
+                
+                // Módulo Configuración (ADMIN)
+                .requestMatchers("/api/usuario/**").hasRole("ADMIN")
+                
+                // Módulo Personal (Lectura para ADMIN y COORDINADOR, Escritura solo ADMIN)
+                .requestMatchers(HttpMethod.GET, "/api/personal/**").hasAnyRole("ADMIN", "COORDINADOR")
+                .requestMatchers("/api/personal/**").hasRole("ADMIN")
+                
+                // Recursos (Salas y Vehículos) (ADMIN y COORDINADOR)
+                .requestMatchers("/api/sala/**").hasAnyRole("ADMIN", "COORDINADOR")
+                .requestMatchers("/api/vehiculo/**").hasAnyRole("ADMIN", "COORDINADOR")
+                
+                // Módulo Servicios Funerarios (ADMIN y COORDINADOR)
+                .requestMatchers("/api/servicio/**").hasAnyRole("ADMIN", "COORDINADOR")
+                .requestMatchers("/api/reserva-sala/**").hasAnyRole("ADMIN", "COORDINADOR")
+                .requestMatchers("/api/asignacion-vehiculo/**").hasAnyRole("ADMIN", "COORDINADOR")
+                .requestMatchers("/api/destino-final/**").hasAnyRole("ADMIN", "COORDINADOR")
+                
+                // Módulo Financiera (ADMIN y ASESOR)
+                .requestMatchers("/api/cotizacion/**").hasAnyRole("ADMIN", "ASESOR")
+                .requestMatchers("/api/comprobante/**").hasAnyRole("ADMIN", "ASESOR")
+                .requestMatchers("/api/pago/**").hasAnyRole("ADMIN", "ASESOR")
+                
+                // Módulo Inventario (Lectura para todos; Gestión solo ADMIN y COORDINADOR)
+                .requestMatchers(HttpMethod.GET, "/api/producto/**").hasAnyRole("ADMIN", "COORDINADOR", "ASESOR")
+                .requestMatchers("/api/producto/**").hasAnyRole("ADMIN", "COORDINADOR")
+                .requestMatchers("/api/movimiento-inventario/**").hasAnyRole("ADMIN", "COORDINADOR")
+                
+                // Módulo Clientes y Difuntos (Lectura para todos; Escritura solo ADMIN y ASESOR)
+                .requestMatchers(HttpMethod.GET, "/api/difunto/**").hasAnyRole("ADMIN", "ASESOR", "COORDINADOR")
+                .requestMatchers(HttpMethod.GET, "/api/cliente/**").hasAnyRole("ADMIN", "ASESOR", "COORDINADOR")
+                .requestMatchers("/api/difunto/**").hasAnyRole("ADMIN", "ASESOR")
+                .requestMatchers("/api/cliente/**").hasAnyRole("ADMIN", "ASESOR")
+                
                 .anyRequest().authenticated()
             )
             .addFilterBefore(jwtFilter, UsernamePasswordAuthenticationFilter.class);

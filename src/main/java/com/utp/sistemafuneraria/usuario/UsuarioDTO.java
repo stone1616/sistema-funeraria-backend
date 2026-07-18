@@ -23,7 +23,7 @@ public class UsuarioDTO {
         String password,
 
         @NotBlank(message = "El rol es obligatorio")
-        @Pattern(regexp = "^(ADMIN|EMPLEADO)$", message = "El rol debe ser ADMIN o EMPLEADO")
+        @Pattern(regexp = "^(ADMIN|ASESOR|COORDINADOR)$", message = "El rol debe ser ADMIN, ASESOR o COORDINADOR")
         String rol
     ) {}
 
@@ -36,7 +36,7 @@ public class UsuarioDTO {
         String email,
 
         @NotBlank(message = "El rol es obligatorio")
-        @Pattern(regexp = "^(ADMIN|EMPLEADO)$", message = "El rol debe ser ADMIN o EMPLEADO")
+        @Pattern(regexp = "^(ADMIN|ASESOR|COORDINADOR)$", message = "El rol debe ser ADMIN, ASESOR o COORDINADOR")
         String rol
     ) {}
 
