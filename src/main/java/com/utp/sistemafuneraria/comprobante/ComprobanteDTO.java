@@ -6,6 +6,7 @@ import java.time.LocalDateTime;
 import jakarta.validation.constraints.NotBlank;
 import jakarta.validation.constraints.NotNull;
 import jakarta.validation.constraints.Pattern;
+import jakarta.validation.constraints.Positive;
 
 public class ComprobanteDTO {
 
@@ -19,12 +20,14 @@ public class ComprobanteDTO {
 
         String numeroComprobante,
 
+        @Pattern(regexp = "^\\d{11}$", message = "El RUC debe tener 11 dígitos")
         String ruc,
         String razonSocial,
 
         LocalDateTime fechaEmision,
 
         @NotNull(message = "El subtotal es obligatorio")
+        @Positive(message = "El subtotal debe ser mayor a 0")
         BigDecimal subtotal,
 
         BigDecimal igv,
@@ -62,7 +65,10 @@ public class ComprobanteDTO {
         Integer idServicio,
         String tipoComprobante,
         String numeroComprobante,
+        String ruc,
+        String razonSocial,
         LocalDateTime fechaEmision,
+        BigDecimal subtotal,
         BigDecimal igv,
         BigDecimal total,
         String estado
